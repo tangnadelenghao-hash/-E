@@ -1,0 +1,15 @@
+[Unit]
+Description=HDMI camera rectangle display
+After=systemd-user-sessions.service
+Conflicts=display-manager.service lightdm.service
+
+[Service]
+Type=simple
+ExecStart=/root/vision_webcam_test/run_hdmi_camera_direct.sh
+Restart=always
+RestartSec=2
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

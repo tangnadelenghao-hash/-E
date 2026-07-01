@@ -1,0 +1,33 @@
+# Local reference packages and generated outputs
+resources_local/
+output/
+build/
+tmp/
+
+# Python caches and test artifacts
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Vision debug snapshots
+debug_*.jpg
+debug_*.png
+*.log
+
+# Embedded build artifacts
+*.obj
+*.out
+*.map
+*.elf
+*.hex
+*.bin
+*.cmd.genlibs
+*.opt
+
+# Editor and OS local files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

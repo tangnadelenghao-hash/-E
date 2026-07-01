@@ -1,0 +1,29 @@
+/**
+ * MSPM0G3507 I2C OLED test.
+ *
+ * OLED SCL: PA31 / A31 / I2C0_SCL
+ * OLED SDA: PA28 / A28 / I2C0_SDA
+ */
+// @cliArgs --device "MSPM0G350X" --package "LQFP-64(PM)" --part "Default"
+// @v2CliArgs --device "MSPM0G3507" --package "LQFP-64(PM)"
+// @cliArgs --board /ti/boards/LP_MSPM0G3507 --rtos nortos
+
+const Board = scripting.addModule("/ti/driverlib/Board");
+const I2C   = scripting.addModule("/ti/driverlib/I2C", {}, false);
+const I2C1  = I2C.addInstance();
+
+I2C1.$name                     = "OLED_I2C";
+I2C1.basicEnableController     = true;
+I2C1.advControllerTXFIFOTRIG   = "BYTES_1";
+I2C1.advAnalogGlitchFilter     = "DISABLED";
+I2C1.peripheral.$assign        = "I2C0";
+I2C1.peripheral.sdaPin.$assign = "PA28";
+I2C1.peripheral.sclPin.$assign = "PA31";
+I2C1.sdaPinConfig.enableConfig = true;
+I2C1.sdaPinConfig.internalResistor = "PULL_UP";
+I2C1.sclPinConfig.enableConfig = true;
+I2C1.sclPinConfig.internalResistor = "PULL_UP";
+
+const SYSCTL                 = scripting.addModule("/ti/driverlib/SYSCTL", {}, false);
+SYSCTL.forceDefaultClkConfig = true;
+SYSCTL.clockTreeEn           = true;
