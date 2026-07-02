@@ -1,0 +1,48 @@
+/**
+ * MSPM0G3507 manual-push line tracking test.
+ *
+ * Grayscale AD0: PB20 / B20
+ * Grayscale AD1: PA14 / A14
+ * Grayscale AD2: PB10 / B10
+ * Grayscale OUT: PA7 / A07 digital input
+ * Debug UART TX: PA10 / UART0_TX
+ * Debug UART RX: PA11 / UART0_RX
+ */
+// @cliArgs --device "MSPM0G350X" --package "LQFP-64(PM)" --part "Default"
+// @v2CliArgs --device "MSPM0G3507" --package "LQFP-64(PM)"
+// @cliArgs --board /ti/boards/LP_MSPM0G3507 --rtos nortos
+
+const Board = scripting.addModule("/ti/driverlib/Board");
+const GPIO  = scripting.addModule("/ti/driverlib/GPIO", {}, false);
+const GPIO1 = GPIO.addInstance();
+const UART  = scripting.addModule("/ti/driverlib/UART", {}, false);
+const UART1 = UART.addInstance();
+
+GPIO1.$name                         = "LINE_TRACKING";
+GPIO1.associatedPins.create(4);
+GPIO1.associatedPins[0].$name       = "AD0";
+GPIO1.associatedPins[0].pin.$assign = "PB20";
+GPIO1.associatedPins[1].$name       = "AD1";
+GPIO1.associatedPins[1].pin.$assign = "PA14";
+GPIO1.associatedPins[2].$name       = "AD2";
+GPIO1.associatedPins[2].pin.$assign = "PB10";
+GPIO1.associatedPins[3].$name       = "OUT";
+GPIO1.associatedPins[3].direction   = "INPUT";
+GPIO1.associatedPins[3].pin.$assign = "PA7";
+
+UART1.$name                            = "DEBUG_UART";
+UART1.targetBaudRate                   = 115200;
+UART1.peripheral.$assign               = "UART0";
+UART1.peripheral.rxPin.$assign         = "PA11";
+UART1.peripheral.txPin.$assign         = "PA10";
+UART1.txPinConfig.direction            = scripting.forceWrite("OUTPUT");
+UART1.txPinConfig.hideOutputInversion  = scripting.forceWrite(false);
+UART1.txPinConfig.onlyInternalResistor = scripting.forceWrite(false);
+UART1.txPinConfig.passedPeripheralType = scripting.forceWrite("Digital");
+UART1.rxPinConfig.hideOutputInversion  = scripting.forceWrite(false);
+UART1.rxPinConfig.onlyInternalResistor = scripting.forceWrite(false);
+UART1.rxPinConfig.passedPeripheralType = scripting.forceWrite("Digital");
+
+const SYSCTL                 = scripting.addModule("/ti/driverlib/SYSCTL", {}, false);
+SYSCTL.forceDefaultClkConfig = true;
+SYSCTL.clockTreeEn           = true;

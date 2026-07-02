@@ -1,0 +1,32 @@
+/**
+ * MSPM0G3507 Bluetooth UART test.
+ *
+ * Bluetooth pin 1: PB6 / B06 / MCU UART TX
+ * Bluetooth pin 2: PB7 / B07 / MCU UART RX
+ * Bluetooth pin 3: GND
+ * Bluetooth pin 4: +5V
+ */
+// @cliArgs --device "MSPM0G350X" --package "LQFP-64(PM)" --part "Default"
+// @v2CliArgs --device "MSPM0G3507" --package "LQFP-64(PM)"
+// @cliArgs --board /ti/boards/LP_MSPM0G3507 --rtos nortos
+
+const Board = scripting.addModule("/ti/driverlib/Board");
+const UART  = scripting.addModule("/ti/driverlib/UART", {}, false);
+const UART1 = UART.addInstance();
+
+UART1.$name                            = "BLUETOOTH_UART";
+UART1.targetBaudRate                   = 9600;
+UART1.peripheral.$assign               = "UART1";
+UART1.peripheral.rxPin.$assign         = "PB7";
+UART1.peripheral.txPin.$assign         = "PB6";
+UART1.txPinConfig.direction            = scripting.forceWrite("OUTPUT");
+UART1.txPinConfig.hideOutputInversion  = scripting.forceWrite(false);
+UART1.txPinConfig.onlyInternalResistor = scripting.forceWrite(false);
+UART1.txPinConfig.passedPeripheralType = scripting.forceWrite("Digital");
+UART1.rxPinConfig.hideOutputInversion  = scripting.forceWrite(false);
+UART1.rxPinConfig.onlyInternalResistor = scripting.forceWrite(false);
+UART1.rxPinConfig.passedPeripheralType = scripting.forceWrite("Digital");
+
+const SYSCTL                 = scripting.addModule("/ti/driverlib/SYSCTL", {}, false);
+SYSCTL.forceDefaultClkConfig = true;
+SYSCTL.clockTreeEn           = true;
